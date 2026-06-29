@@ -26,7 +26,7 @@ lint:
 
 # 3. Запуск тестов
 test:
-	python -m unittest discover -s app/tests
+	PYTHONPATH=. pytest app/tests/tests/test_app.py -v
 
 # 4. Локальный запуск приложения (без Docker)
 run:
