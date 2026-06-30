@@ -1,0 +1,23 @@
+- name: Обновить apt chache
+  apt:
+    update-cache: yes
+
+- name: Установить docker и docker-compose
+  apt:
+    name:
+      - docker.io
+      - docker-compose
+    state: present
+
+- name: Включить daemon Docker
+  systemd:
+    name: docker
+    enable: yes
+    state: started
+
+- name: Добавить текущего пользователя в группу docker
+  user: 
+    name: "{{ansible_user}}" 
+    groups: docker
+    append: yes
+

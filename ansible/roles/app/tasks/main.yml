@@ -1,0 +1,30 @@
+- name: Создать директорию /opt/simple-app
+  file: 
+    path: /opt/simple-app
+    state: directory
+    mode: '0755'
+
+- name: Скопировать файлы приложения на сервер
+  copy:
+    src: ../../app/
+    dest: /opt/simple-app/app/
+    mode: '0755'
+
+- name: Скопировать docker-compose.yml
+  copy:
+    src: ../../docker-compose.yml
+    dest: /opt/simple-app/docker-compose.yml
+
+- name: Запустить docker-compose up -d
+  command: docker-compose up -d
+  args:
+    chdir: /opt/simple-app
+
+- name: Проверить, что контейнер запущен
+  uri:
+    url: "http://locahost:5000/health"
+    status_code: 200
+    register: result
+    until: result.status == 200
+    retires: 5
+    delay: 3
